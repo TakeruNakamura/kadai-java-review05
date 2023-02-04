@@ -25,17 +25,20 @@ public class Review05 {
             con = DriverManager.getConnection(
                     "jdbc:mysql://localhost/kadaidb?useSSL=false&allowPublicKeyRetrieval=true",
                     "root",
-                    "password"
+                    "9bahrko2"
                     );
 
             // 4. DBとやりとりする窓口（Statementオブジェクト）の作成
-            System.out.print("検索キーワードを入力してください > ");
-            String input = keyIn();
-            String sql = "SELECT * FROM person where id = '" + Integer.parseInt(input) + "'";
+            String sql = "SELECT * FROM person where id = ?";
+
             pstmt = con.prepareStatement(sql);
 
             // 5, 6. Select文の実行と結果を格納／代入
-            rs = pstmt.executeQuery(sql);
+            System.out.print("検索キーワードを入力してください > ");
+            int input = keyInNum();
+
+            pstmt.setInt(1, input);
+            rs = pstmt.executeQuery();
 
             // 7. 結果を表示する
             while (rs.next()) {
@@ -88,6 +91,14 @@ public class Review05 {
 
         }
         return line;
+    }
+    private static int keyInNum() {
+        int result = 0;
+        try {
+            result = Integer.parseInt(keyIn());
+        } catch (NumberFormatException e) {
+        }
+        return result;
     }
 
 }
